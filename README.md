@@ -154,7 +154,11 @@ if __name__ == '__main__':
 
 ## 支持的CTP版本
 
-tradebest-ctp-python支持以下CTP API版本:
+tradebest-ctp-python当前版本主要支持以下CTP API版本:
+
+- 6.7.7 (当前版本)
+
+未来计划支持以下版本:
 
 - 6.3.15
 - 6.3.19
@@ -165,7 +169,6 @@ tradebest-ctp-python支持以下CTP API版本:
 - 6.7.0
 - 6.7.1
 - 6.7.2
-- 6.7.7
 
 ## 许可证
 
