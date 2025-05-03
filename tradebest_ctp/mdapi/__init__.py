@@ -5,6 +5,7 @@ Market Data API module for CTP
 import os
 import platform
 import sys
+import ctypes
 
 system = platform.system()
 machine = platform.machine()
@@ -24,7 +25,7 @@ else:
 
 version = "6.7.7_20240607"
 
-module_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 
+module_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 
                           version, platform_dir)
 sys.path.insert(0, module_path)
 
@@ -35,10 +36,18 @@ if system == "Windows":
         sys.path.insert(0, py_module_path)
 
 if system == "Linux":
-    lib_path = os.environ.get("LD_LIBRARY_PATH", "")
-    if module_path not in lib_path:
-        os.environ["LD_LIBRARY_PATH"] = f"{module_path}:{lib_path}"
+    try:
+        lib_path = os.path.join(module_path, "libthostmduserapi_se.so")
+        if os.path.exists(lib_path):
+            ctypes.CDLL(lib_path)
+    except Exception as e:
+        print(f"Warning: Failed to load library: {e}")
 
-from thostmduserapi import *
-
-__all__ = [name for name in dir() if not name.startswith('_')]
+try:
+    from thostmduserapi import *
+    __all__ = [name for name in dir() if not name.startswith('_')]
+except ImportError as e:
+    print(f"Error importing thostmduserapi: {e}")
+    print(f"Module path: {module_path}")
+    print(f"System path: {sys.path}")
+    __all__ = []
