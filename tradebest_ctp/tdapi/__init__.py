@@ -22,24 +22,22 @@ elif system == "Darwin":
 else:
     raise Exception(f"Unsupported platform: {system}")
 
-ctp_versions = [
-    "6.3.15_20190220",
-    "6.3.19_P1_20200106",
-    "6.5.1_20200908",
-    "6.6.1_P1_20210406",
-    "6.6.7_20220613",
-    "6.6.9_20220920",
-    "6.7.0_20230209",
-    "6.7.1_20230613",
-    "6.7.2_20230913",
-    "6.7.7_20240607",
-]
+version = "6.7.7_20240607"
 
-default_version = ctp_versions[-1]
-
-module_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 
-                          default_version, platform_dir)
+module_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 
+                          version, platform_dir)
 sys.path.insert(0, module_path)
+
+if system == "Windows":
+    py_version_dir = f"py3{python_version.split('.')[1]}"
+    py_module_path = os.path.join(module_path, py_version_dir)
+    if os.path.exists(py_module_path):
+        sys.path.insert(0, py_module_path)
+
+if system == "Linux":
+    lib_path = os.environ.get("LD_LIBRARY_PATH", "")
+    if module_path not in lib_path:
+        os.environ["LD_LIBRARY_PATH"] = f"{module_path}:{lib_path}"
 
 from thosttraderapi import *
 
