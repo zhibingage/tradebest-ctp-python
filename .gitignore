@@ -2,7 +2,8 @@
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
+# Allow CTP library files
+# *.so
 .Python
 build/
 develop-eggs/
